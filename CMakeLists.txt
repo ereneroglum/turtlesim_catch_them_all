@@ -34,6 +34,8 @@ find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   msg/Turtle.msg)
 
+rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
 # add turtle spawner binary to build list
 add_executable(turtle_spawner
   include/turtlesim_catch_them_all/turtle_spawner.hpp
@@ -44,6 +46,8 @@ target_include_directories(turtle_spawner
   PUBLIC include)
 
 ament_target_dependencies(turtle_spawner rclcpp)
+
+target_link_libraries(turtle_spawner "${cpp_typesupport_target}")
 
 # Use strict error checking
 target_compile_options(turtle_spawner PRIVATE
