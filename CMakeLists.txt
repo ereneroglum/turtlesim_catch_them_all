@@ -33,7 +33,8 @@ find_package(turtlesim REQUIRED)
 
 # Build messages
 rosidl_generate_interfaces(${PROJECT_NAME}
-  msg/Turtle.msg)
+  msg/Turtle.msg
+  srv/TurtleCatch.srv)
 
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
