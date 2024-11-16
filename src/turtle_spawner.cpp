@@ -15,14 +15,33 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "turtlesim_catch_them_all/turtle_spawner.hpp"
+#include <random>
+#include <string>
+#include <thread>
 
 namespace turtlesim_catch_them_all {
-TurtleSpawner::TurtleSpawner() : Node("turtle_spawner") {
-  this->m_name = "turtle_spawner";
+
+static double randomDouble() {
+  return double(std::rand()) / (double(RAND_MAX) + 1.0);
 }
 
-TurtleSpawner::TurtleSpawner(const std::string &name) : Node(name) {
-  this->m_name = name;
+static constexpr double PI = 3.1415;
+
+TurtleSpawner::TurtleSpawner(std::optional<std::string> name)
+    : Node(name.value_or("turtle_spawner")) {
+  this->m_name = name.value_or("turtle_spawner");
+  m_randomTurtleSpawnTimer = this->create_wall_timer(
+      std::chrono::seconds(1),
+      std::bind(&TurtleSpawner::spawnRandomTurtle, this));
+}
+
+void TurtleSpawner::spawnRandomTurtle() {
+  double x = randomDouble() * 10;
+  double y = randomDouble() * 10;
+  double theta = randomDouble() * 2 * PI;
+  auto thread = std::make_shared<std::thread>(
+      std::thread([=]() { this->spawnTurtle(x, y, theta); }));
+  m_spawnTurtleThreads.push_back(thread);
 }
 
 void TurtleSpawner::spawnTurtle(double x, double y, double theta,

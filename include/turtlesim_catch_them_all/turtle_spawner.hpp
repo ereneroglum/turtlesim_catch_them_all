@@ -19,6 +19,7 @@
 
 #include "turtlesim/srv/spawn.hpp"
 #include "turtlesim_catch_them_all/msg/turtle.hpp"
+#include <optional>
 #include <queue>
 #include <rclcpp/rclcpp.hpp>
 #include <string>
@@ -35,20 +36,9 @@ public:
   /**
    * @brief Default constructor
    *
-   * @details This is the default constructor for TurtleSpawner node. Since no
-   * name is given for the node, defaults to "turtlespawner".
+   * @params[in] name (Optional) Name of the node. Defaults to "turtle_spawner".
    */
-  TurtleSpawner();
-
-  /**
-   * @brief Named constructor
-   *
-   * @details This constructor is functionally same as the default constructor
-   * with the exception of accepting a name for the node.
-   *
-   * @param name[in] Name of the node
-   */
-  TurtleSpawner(const std::string &name);
+  TurtleSpawner(std::optional<std::string> name = std::nullopt);
 
   /**
    * @brief Get next turtle
@@ -69,24 +59,45 @@ private:
    * It should only be set from constructor.
    */
   std::string m_name;
+
+  /**
+   * @brief Active turtles
+   */
   std::queue<turtlesim_catch_them_all::msg::Turtle> m_turtles;
 
   /**
-   * @brief Send spawn request to turtlesim and record turtle
+   * @brief ROS timer responsible for spawning turtles
+   */
+  rclcpp::TimerBase::SharedPtr m_randomTurtleSpawnTimer;
+
+  /**
+   * @brief Turtle spawning threads of asynchronus calls
+   */
+  std::vector<std::shared_ptr<std::thread>> m_spawnTurtleThreads;
+
+  /**
+   * @brief send spawn request to turtlesim and record turtle
    *
-   * @details This function sends spawn requests to turtlesim service. After a
+   * @details this function sends spawn requests to turtlesim service. after a
    * successfull call, it records the information about turtle.
    *
-   * @param x[in] Location of turtle on the x axis
-   * @param y[in] Location of turtle on the y axis
-   * @param theta[in] Orientation of turtle
-   * @param name[in] (Optional) Name of the turtle. Defaults to std::nullopt
+   * @param x[in] location of turtle on the x axis
+   * @param y[in] location of turtle on the y axis
+   * @param theta[in] orientation of turtle
+   * @param name[in] (optional) name of the turtle. defaults to std::nullopt
    * which means it is up to the upstream service to decide the name.
    *
-   * @note For internal use only
+   * @note for internal use only
    */
   void spawnTurtle(double x, double y, double theta,
                    std::optional<std::string> name = std::nullopt);
+
+  /**
+   * @brief Spawn a random turtle
+   *
+   * @note for internal use only
+   */
+  void spawnRandomTurtle();
 };
 } // namespace turtlesim_catch_them_all
 
