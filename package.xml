@@ -1,3 +1,6 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+
 <!--
   turtlesim_catch_them_all Example project for learning ROS2
   Copyright (C) 2024  Eren Eroğlu
@@ -16,8 +19,6 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<?xml version="1.0"?>
-<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>turtlesim_catch_them_all</name>
   <version>0.0.0</version>
