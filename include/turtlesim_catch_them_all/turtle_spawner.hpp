@@ -16,7 +16,7 @@ public:
   /**
    * @brief Default constructor.
    *
-   * @detail This is the default constructor for TurtleSpawner node. Since no
+   * @details This is the default constructor for TurtleSpawner node. Since no
    * name is given for the node, defaults to "turtlespawner"
    */
   TurtleSpawner();
@@ -24,7 +24,7 @@ public:
   /**
    * @brief Named constructor.
    *
-   * @detail This constructor is functionally same as the default constructor
+   * @details This constructor is functionally same as the default constructor
    * with the exception of accepting a name for the node.
    *
    * @param name[in] Name of the node.
