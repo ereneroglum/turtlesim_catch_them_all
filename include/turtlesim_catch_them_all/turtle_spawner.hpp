@@ -43,7 +43,7 @@ public:
    * @details This constructor is functionally same as the default constructor
    * with the exception of accepting a name for the node.
    *
-   * @param name[in] Name of the node.
+   * @param name[in] Name of the node
    */
   TurtleSpawner(const std::string &name);
 
