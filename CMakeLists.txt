@@ -4,9 +4,10 @@ project(turtlesim_catch_them_all)
 # Export compile commands for completion via langauge server
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
+# Set C++ standard as C++ 17 with no compiler extensions
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
@@ -22,6 +23,12 @@ target_include_directories(turtle_spawner
   PUBLIC include)
 
 ament_target_dependencies(turtle_spawner rclcpp)
+
+# Use strict error checking
+target_compile_options(turtle_spawner PRIVATE
+  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
+)
 
 install(TARGETS turtle_spawner)
 
