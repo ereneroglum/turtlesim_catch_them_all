@@ -12,6 +12,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+
+# Build messages
+rosidl_generate_interfaces(${PROJECT_NAME}
+  msg/Turtle.msg)
 
 # add turtle spawner binary to build list
 add_executable(turtle_spawner
