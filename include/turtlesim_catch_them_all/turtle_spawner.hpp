@@ -32,6 +32,12 @@ public:
   TurtleSpawner(const std::string &name);
 
 private:
+  /**
+   * @brief Node name
+   *
+   * @details This name will be used for announcing services and topics.
+   * It should only be set from constructor.
+   */
   std::string m_name;
 };
 } // namespace turtlesim_catch_them_all
