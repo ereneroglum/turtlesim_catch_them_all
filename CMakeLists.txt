@@ -10,9 +10,20 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+
+# add turtle spawner binary to build list
+add_executable(turtle_spawner
+  include/turtlesim_catch_them_all/turtle_spawner.hpp
+  src/spawner.cpp
+  src/turtle_spawner.cpp)
+
+target_include_directories(turtle_spawner
+  PUBLIC include)
+
+ament_target_dependencies(turtle_spawner rclcpp)
+
+install(TARGETS turtle_spawner)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
