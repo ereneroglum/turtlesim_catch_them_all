@@ -17,6 +17,9 @@
 #ifndef TURTLE_SPAWNER
 #define TURTLE_SPAWNER
 
+#include "turtlesim/srv/spawn.hpp"
+#include "turtlesim_catch_them_all/msg/turtle.hpp"
+#include <queue>
 #include <rclcpp/rclcpp.hpp>
 #include <string>
 
@@ -47,6 +50,17 @@ public:
    */
   TurtleSpawner(const std::string &name);
 
+  /**
+   * @brief Get next turtle
+   *
+   * @details This function returns the first turtle on the queue without
+   * removing the turtle if the queue is not empty. Otherwise it returns
+   * std::nullopt.
+   *
+   * @return First turtle in the queue or std::nullopt.
+   */
+  std::optional<turtlesim_catch_them_all::msg::Turtle> getTurtle();
+
 private:
   /**
    * @brief Node name
@@ -55,6 +69,24 @@ private:
    * It should only be set from constructor.
    */
   std::string m_name;
+  std::queue<turtlesim_catch_them_all::msg::Turtle> m_turtles;
+
+  /**
+   * @brief Send spawn request to turtlesim and record turtle
+   *
+   * @details This function sends spawn requests to turtlesim service. After a
+   * successfull call, it records the information about turtle.
+   *
+   * @param x[in] Location of turtle on the x axis
+   * @param y[in] Location of turtle on the y axis
+   * @param theta[in] Orientation of turtle
+   * @param name[in] (Optional) Name of the turtle. Defaults to std::nullopt
+   * which means it is up to the upstream service to decide the name.
+   *
+   * @note For internal use only
+   */
+  void spawnTurtle(double x, double y, double theta,
+                   std::optional<std::string> name = std::nullopt);
 };
 } // namespace turtlesim_catch_them_all
 

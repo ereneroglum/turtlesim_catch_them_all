@@ -29,6 +29,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+find_package(turtlesim REQUIRED)
 
 # Build messages
 rosidl_generate_interfaces(${PROJECT_NAME}
@@ -46,6 +47,7 @@ target_include_directories(turtle_spawner
   PUBLIC include)
 
 ament_target_dependencies(turtle_spawner rclcpp)
+ament_target_dependencies(turtle_spawner turtlesim)
 
 target_link_libraries(turtle_spawner "${cpp_typesupport_target}")
 
