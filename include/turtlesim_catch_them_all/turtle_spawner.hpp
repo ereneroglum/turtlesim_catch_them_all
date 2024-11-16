@@ -6,7 +6,7 @@
 
 namespace turtlesim_catch_them_all {
 /**
- * @brief Turtle spawner node for spawning turtles on turtlesim.
+ * @brief Turtle spawner node for spawning turtles on turtlesim
  *
  * @details This class is used to spawn turtles and store useful information
  * about spawned turtles.
@@ -14,15 +14,15 @@ namespace turtlesim_catch_them_all {
 class TurtleSpawner : public rclcpp::Node {
 public:
   /**
-   * @brief Default constructor.
+   * @brief Default constructor
    *
    * @details This is the default constructor for TurtleSpawner node. Since no
-   * name is given for the node, defaults to "turtlespawner"
+   * name is given for the node, defaults to "turtlespawner".
    */
   TurtleSpawner();
 
   /**
-   * @brief Named constructor.
+   * @brief Named constructor
    *
    * @details This constructor is functionally same as the default constructor
    * with the exception of accepting a name for the node.
