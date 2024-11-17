@@ -15,9 +15,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "turtlesim_catch_them_all/turtle_spawner.hpp"
+#include "turtlesim_catch_them_all/srv/catch_turtle.hpp"
+#include "turtlesim_catch_them_all/srv/detail/catch_turtle__struct.hpp"
 #include <random>
 #include <string>
 #include <thread>
+#include <turtlesim/srv/kill.hpp>
 
 namespace turtlesim_catch_them_all {
 
@@ -33,6 +36,40 @@ TurtleSpawner::TurtleSpawner(std::optional<std::string> name)
   m_randomTurtleSpawnTimer = this->create_wall_timer(
       std::chrono::seconds(1),
       std::bind(&TurtleSpawner::spawnRandomTurtle, this));
+  m_catchTurtleService =
+      this->create_service<turtlesim_catch_them_all::srv::CatchTurtle>(
+          "catch_turtle",
+          [this](__attribute__((unused)) const turtlesim_catch_them_all::srv::
+                     CatchTurtle::Request::SharedPtr _,
+                 turtlesim_catch_them_all::srv::CatchTurtle::Response::SharedPtr
+                     response) { response->ok = this->catchTurtle(); });
+}
+
+bool TurtleSpawner::catchTurtle() {
+  if (this->m_turtles.empty()) {
+    return false;
+  }
+
+  auto turtle = this->getTurtle();
+
+  auto client = this->create_client<turtlesim::srv::Kill>("kill");
+  while (!client->wait_for_service(std::chrono::seconds(1))) {
+    RCLCPP_WARN(this->get_logger(), "Waiting for Service Server to be up...");
+  }
+
+  auto request = std::make_shared<turtlesim::srv::Kill::Request>();
+  request->name = turtle->name;
+
+  auto future = client->async_send_request(request);
+
+  try {
+    future.get();
+    this->m_turtles.pop();
+    return true;
+  } catch (const std::exception &e) {
+    RCLCPP_ERROR(this->get_logger(), "Service call failed.");
+    return false;
+  }
 }
 
 void TurtleSpawner::spawnRandomTurtle() {

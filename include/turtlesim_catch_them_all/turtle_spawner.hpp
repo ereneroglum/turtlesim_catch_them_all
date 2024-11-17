@@ -19,6 +19,7 @@
 
 #include "turtlesim/srv/spawn.hpp"
 #include "turtlesim_catch_them_all/msg/turtle.hpp"
+#include "turtlesim_catch_them_all/srv/catch_turtle.hpp"
 #include <optional>
 #include <queue>
 #include <rclcpp/rclcpp.hpp>
@@ -76,6 +77,12 @@ private:
   std::vector<std::shared_ptr<std::thread>> m_spawnTurtleThreads;
 
   /**
+   * @brief Turtle catching service
+   */
+  rclcpp::Service<turtlesim_catch_them_all::srv::CatchTurtle>::SharedPtr
+      m_catchTurtleService;
+
+  /**
    * @brief send spawn request to turtlesim and record turtle
    *
    * @details this function sends spawn requests to turtlesim service. after a
@@ -98,6 +105,16 @@ private:
    * @note for internal use only
    */
   void spawnRandomTurtle();
+
+  /**
+   * @brief Catch the first turtle on the queue
+   *
+   * @return If there was a turtle on the queue, returns true. Otherwise returns
+   * false.
+   *
+   * @note for internal use only
+   */
+  bool catchTurtle();
 };
 } // namespace turtlesim_catch_them_all
 
